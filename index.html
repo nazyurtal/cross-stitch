@@ -1,0 +1,138 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cross Stitch</title><style>body{margin:0;background:#151517}button,summary,input{cursor:pointer}</style></head><body><div id="stitch-tool"><header class="cs-header"><h2>Cross Stitch</h2></header><div class="cs-layout"><main class="cs-stage"><div class="cs-zoom-toolbar"><button type="button" id="zoom-out" aria-label="Zoom out">−</button><output id="zoom-value" aria-live="polite">100%</output><button type="button" id="zoom-in" aria-label="Zoom in">+</button><button type="button" id="zoom-fit">Fit</button></div><div class="cs-preview" id="zoom-viewport"><canvas id="stitch-canvas" role="img" aria-label="Preview"></canvas></div><div id="stitch-status" class="cs-caption" hidden aria-live="polite">Sample image · Upload your own image to begin.</div></main><aside class="cs-right"><div class="cs-section-title">INPUT</div><div class="cs-upload-field"><div class="form-label">Upload image</div><label class="cs-dropzone" id="stitch-drop"><input id="stitch-upload" type="file" accept="image/*" aria-label="Upload image"><span class="cs-upload-symbol" aria-hidden="true">＋</span><span id="stitch-upload-name">Drop an image here</span><span class="cs-upload-caption">or click to browse</span><span class="cs-upload-formats">PNG · JPG · WEBP</span></label></div><div class="cs-section-title">SETTINGS</div><label class="form-label">Stitch size <output id="size-value">10</output><input  id="stitch-size" type="range" min="5" max="30" value="10"></label><label class="form-label">Thread thickness <output id="width-value">18</output><input  id="stitch-width" type="range" min="10" max="44" value="18"></label><label class="form-label">Yarn softness <output id="fluff-value">82</output><input  id="stitch-fluff" type="range" min="0" max="100" value="82"></label><div class="cs-section-title">NATURAL TEXTURE</div><label class="form-label">Handmade variation <output id="organic-value">35</output><input id="stitch-organic" type="range" min="0" max="100" value="35"></label><label class="form-label">Thread tone variation <output id="tone-value">18</output><input id="stitch-tone" type="range" min="0" max="100" value="18"></label><label class="form-label">Thread depth <output id="relief-value">45</output><input id="stitch-relief" type="range" min="0" max="100" value="45"></label><label class="form-label">Matte finish <output id="matte-value">75</output><input id="stitch-matte" type="range" min="0" max="100" value="75"></label><div class="cs-section-title">BACKGROUND</div><label class="form-check"><input  id="stitch-remove" type="checkbox" checked><span class="form-check-label">Remove background</span></label><div class="cs-color-field"><label class="form-label" for="stitch-key">Background</label><div class="cs-color-picker"><span class="cs-color-swatch"><input type="color" id="stitch-key" value="#ffffff" aria-label="Background color"></span><input id="stitch-key-hex" type="text" value="#FFFFFF" maxlength="7" spellcheck="false" aria-label="Background HEX color"><span class="cs-color-hint">HEX</span></div></div><label class="form-label">Removal tolerance <output id="tolerance-value">10</output><input  id="stitch-tolerance" type="range" min="0" max="70" value="10"></label><input type="hidden" id="stitch-cloth" value="#f5f0e0"><div class="cs-section-title">EXPORT</div><label class="form-label">Format<select id="export-format"><option value="png">PNG · Lossless + transparency</option><option value="jpeg">JPEG · Smaller file</option><option value="webp">WebP · Transparency</option></select></label><label class="form-label">Resolution<select id="export-scale"><option value="1">1×</option><option value="2" selected>2× · High</option><option value="3">3× · Ultra</option><option value="4">4× · Maximum</option></select></label><label class="form-label" id="export-quality-label">Quality <output id="export-quality-value">95%</output><input id="export-quality" type="range" min="50" max="100" value="95"></label><div id="export-info" class="cs-caption" aria-live="polite"></div><button id="save-stitch" class="cs-download"><span aria-hidden="true">⤓</span> Download PNG</button></aside></div></div><style>
+#stitch-tool{--cs-bg:#151517;--cs-panel:#19191b;--cs-input:#262629;--cs-line:#303033;--cs-text:#ededee;--cs-muted:#a0a0a5;background:var(--cs-bg);color:var(--cs-text);font:400 13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark}
+#stitch-tool *{box-sizing:border-box}#stitch-tool .cs-header{height:58px;display:flex;gap:20px;align-items:center;padding:0 20px;border-bottom:1px solid var(--cs-line)}#stitch-tool h2{font-size:16px;font-weight:500;margin:0}#stitch-tool .cs-sub{font-size:10px;color:var(--cs-muted);letter-spacing:1.3px}
+#stitch-tool .cs-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;min-height:650px}#stitch-tool aside{padding:20px 16px;background:var(--cs-panel);min-width:0}#stitch-tool .cs-left{border-right:1px solid var(--cs-line)}#stitch-tool .cs-right{border-left:1px solid var(--cs-line)}#stitch-tool .cs-section-title{font-size:10px;letter-spacing:1px;color:var(--cs-muted);margin:22px 0 14px;border-top:1px solid var(--cs-line);padding-top:18px}#stitch-tool .cs-section-title:first-child{margin-top:0;border:0;padding-top:0}
+#stitch-tool .cs-stage{min-width:0;background:#080809;padding:36px 20px;display:flex;flex-direction:column;justify-content:center;gap:15px}#stitch-tool .cs-preview{background:repeating-conic-gradient(#171719 0% 25%,#121214 0% 50%) 0 0/14px 14px;border:1px solid var(--cs-line);display:flex;align-items:center;min-height:390px}#stitch-tool canvas{width:100%;height:auto;display:block}#stitch-tool .cs-caption{font-size:11px;color:var(--cs-muted);margin:10px 0}#stitch-tool .cs-active{display:flex;justify-content:space-between;padding:12px 0}#stitch-tool .cs-active span{color:#eeeeef}#stitch-tool .cs-effect-name{margin-bottom:16px}
+#stitch-tool .form-label{display:block;font-size:11px;color:var(--cs-muted);margin-bottom:14px;min-width:0}#stitch-tool output{float:right;color:var(--cs-text);font-variant-numeric:tabular-nums}#stitch-tool input[type=range]{display:block;width:100%;accent-color:#c0c0c6;margin:9px 0;height:20px}#stitch-tool input[type=color]{display:block;width:100%;height:34px;border:1px solid var(--cs-line);background:var(--cs-input);padding:6px;margin-top:7px;border-radius:7px}#stitch-tool input[type=file]{display:block;width:100%;font-size:10px;padding:12px 7px;background:var(--cs-input);border:1px dashed #414145;border-radius:7px;margin-top:8px}#stitch-tool input[type=file]::file-selector-button{background:#36363b;color:var(--cs-text);border:0;padding:5px;margin-bottom:6px;border-radius:4px}#stitch-tool .form-check{display:flex;gap:8px;align-items:center;margin-bottom:18px;font-size:12px}#stitch-tool input[type=checkbox]{accent-color:#c0c0c6}#stitch-tool .cs-download{width:100%;padding:12px;background:#ededee;color:#19191b;border:0;border-radius:7px;font:inherit}#stitch-tool details{font-size:11px;color:var(--cs-muted);margin-top:25px!important}#stitch-tool details ol{padding-left:16px}#stitch-tool details li{margin-bottom:8px}
+@media(max-width:850px){#stitch-tool .cs-layout{grid-template-columns:minmax(0,1fr) 230px}#stitch-tool .cs-left{grid-column:1/-1;border-right:0;border-bottom:1px solid var(--cs-line)}#stitch-tool .cs-left .cs-section-title:not(:first-child),#stitch-tool .cs-active,#stitch-tool .cs-left .cs-caption{display:none}#stitch-tool .cs-left details{margin-top:10px!important}#stitch-tool .cs-preview{min-height:260px}}
+@media(max-width:520px){#stitch-tool .cs-layout{grid-template-columns:minmax(0,1fr)}#stitch-tool .cs-right{border-left:0}#stitch-tool .cs-sub{display:none}#stitch-tool .cs-stage{padding:20px 12px}}
+
+#stitch-tool .cs-zoom-toolbar{display:flex;align-items:center;justify-content:center;gap:12px}
+#stitch-tool .cs-zoom-toolbar button{background:var(--cs-input);color:var(--cs-text);border:1px solid var(--cs-line);border-radius:6px;padding:6px 12px;font:inherit}
+#stitch-tool #zoom-value{float:none;min-width:48px;text-align:center;font-variant-numeric:tabular-nums}
+#stitch-tool #zoom-viewport{position:relative;overflow:hidden;touch-action:none;cursor:grab;height:440px;min-height:0;justify-content:center}
+#stitch-tool #zoom-viewport.dragging{cursor:grabbing}
+#stitch-tool #stitch-canvas{transform-origin:center;flex-shrink:0;max-height:100%;object-fit:contain;user-select:none}
+@media(max-width:520px){#stitch-tool #zoom-viewport{height:300px}}
+
+#stitch-tool input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:26px;margin:8px 0 2px;padding:0;outline-offset:4px}
+#stitch-tool input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:99px;background:linear-gradient(to right,#a9a7b1 0%,#a9a7b1 var(--range-fill,50%),#353439 var(--range-fill,50%),#353439 100%);border:0}
+#stitch-tool input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;margin-top:-4.5px;border-radius:50%;background:#dedce4;border:2px solid #b8b5c2;box-shadow:0 1px 5px #00000030;transition:box-shadow .15s,background .15s}
+#stitch-tool input[type=range]:hover::-webkit-slider-thumb{background:#f0eef5;box-shadow:0 0 0 4px #b8b5c214}
+#stitch-tool input[type=range]:active::-webkit-slider-thumb{box-shadow:0 0 0 6px #b8b5c220}
+#stitch-tool input[type=range]::-moz-range-track{height:4px;border-radius:99px;background:#353439;border:0}
+#stitch-tool input[type=range]::-moz-range-progress{height:4px;border-radius:99px;background:#a9a7b1}
+#stitch-tool input[type=range]::-moz-range-thumb{width:10px;height:10px;border-radius:50%;background:#dedce4;border:2px solid #b8b5c2;box-shadow:0 1px 5px #00000030}
+#stitch-tool .cs-right output{color:#bbb8c5;font-weight:400}
+@media(pointer:coarse){#stitch-tool input[type=range]{height:36px}}
+
+#stitch-tool .cs-color-field{margin-bottom:18px}
+#stitch-tool .cs-color-field .form-label{margin-bottom:8px}
+#stitch-tool .cs-color-picker{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--cs-input);border:1px solid var(--cs-line);border-radius:9px}
+#stitch-tool .cs-color-swatch{display:block;width:26px;height:26px;border-radius:6px;overflow:hidden;flex-shrink:0;box-shadow:0 0 0 1px #ffffff18}
+#stitch-tool .cs-color-swatch input[type=color]{appearance:none;-webkit-appearance:none;display:block;width:100%;height:100%;padding:0;margin:0;border:0;border-radius:0;background:none}
+#stitch-tool .cs-color-swatch input::-webkit-color-swatch-wrapper{padding:0}
+#stitch-tool .cs-color-swatch input::-webkit-color-swatch{border:0;border-radius:0}
+#stitch-tool .cs-color-swatch input::-moz-color-swatch{border:0}
+#stitch-tool #stitch-key-hex{min-width:0;width:100%;background:transparent;color:var(--cs-text);border:0;padding:3px 0;font:400 12px/1.5 ui-monospace,monospace;cursor:text;text-transform:uppercase}
+#stitch-tool .cs-color-hint{font-size:9px;letter-spacing:.7px;color:var(--cs-muted)}
+#stitch-tool .cs-color-picker:focus-within{border-color:#8e8b99}
+
+#stitch-tool .cs-upload-field{margin-bottom:22px}
+#stitch-tool .cs-dropzone{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:150px;padding:20px 14px;background:linear-gradient(145deg,#252528,#202023);border:1px dashed #49474f;border-radius:12px;text-align:center;transition:background .18s,border-color .18s;cursor:pointer}
+#stitch-tool .cs-dropzone:hover,#stitch-tool .cs-dropzone.is-over{background:#2d2c32;border-color:#9a96a5}
+#stitch-tool .cs-dropzone:focus-within{outline:2px solid #a9a5b5;outline-offset:3px}
+#stitch-tool .cs-dropzone input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;padding:0;cursor:pointer}
+#stitch-tool .cs-upload-symbol{width:32px;height:32px;display:grid;place-items:center;background:#ffffff08;border:1px solid #ffffff0c;border-radius:9px;color:#cfccd7;font-size:20px}
+#stitch-tool #stitch-upload-name{max-width:100%;overflow-wrap:anywhere;font-size:12px;color:var(--cs-text)}
+#stitch-tool .cs-upload-caption{font-size:11px;color:var(--cs-muted)}
+#stitch-tool .cs-upload-formats{font-size:9px;letter-spacing:.8px;color:#77757e;margin-top:5px}
+
+#stitch-tool .cs-layout{height:720px;min-height:0;overflow:hidden}
+#stitch-tool .cs-stage{justify-content:flex-start;align-self:stretch;min-height:0}
+#stitch-tool #zoom-viewport{align-items:flex-start;flex-shrink:0}
+#stitch-tool #stitch-canvas{transform-origin:center top}
+#stitch-tool .cs-right{height:100%;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#4c4953 transparent}
+#stitch-tool .cs-right::-webkit-scrollbar{width:6px}
+#stitch-tool .cs-right::-webkit-scrollbar-thumb{background:#4c4953;border-radius:6px}
+#stitch-tool .cs-right::-webkit-scrollbar-track{background:transparent}
+@media(max-width:520px){#stitch-tool .cs-layout{height:auto;overflow:visible}#stitch-tool .cs-right{height:auto;max-height:560px}#stitch-tool .cs-stage{padding-bottom:20px}}
+
+#stitch-tool select{display:block;width:100%;margin-top:8px;padding:10px;background:var(--cs-input);color:var(--cs-text);border:1px solid var(--cs-line);border-radius:8px;font:inherit}
+#stitch-tool .cs-download:disabled{opacity:.5;cursor:wait}
+#stitch-tool .cs-stage{padding:24px 20px}
+#stitch-tool .cs-preview{border-radius:8px}
+
+#stitch-tool .cs-stage{position:relative;padding:12px;gap:0;overflow:hidden}
+#stitch-tool #zoom-viewport{height:100%;width:100%;min-height:0;flex:1;border-radius:6px}
+#stitch-tool .cs-zoom-toolbar{position:absolute;right:28px;bottom:28px;z-index:5;gap:8px;padding:7px;background:#202024ed;border:1px solid #3b3942;border-radius:10px;box-shadow:0 4px 20px #00000030}
+#stitch-tool .cs-zoom-toolbar button{border:0;background:#303035;padding:7px 12px}
+#stitch-tool #zoom-value{font-size:12px}
+@media(max-width:520px){#stitch-tool .cs-stage{height:420px;padding:8px}#stitch-tool #zoom-viewport{height:100%}#stitch-tool .cs-zoom-toolbar{right:20px;bottom:20px}}
+
+#stitch-tool{width:100%;min-width:0}
+#stitch-tool .cs-layout{grid-template-columns:minmax(0,1fr) 270px}
+#stitch-tool .cs-header{min-width:0}
+#stitch-tool .cs-right{overflow-x:hidden}
+#stitch-tool .cs-download,#stitch-tool select{min-height:42px}
+@media(min-width:1400px){#stitch-tool .cs-layout{grid-template-columns:minmax(0,1fr) 300px}}
+@media(min-width:701px) and (max-width:1000px){#stitch-tool .cs-layout{grid-template-columns:minmax(0,1fr) 240px}#stitch-tool aside{padding:18px 14px}#stitch-tool .cs-stage{padding:8px}}
+@media(max-width:700px){
+#stitch-tool .cs-layout{display:flex;flex-direction:column;height:auto;min-height:0;overflow:visible}
+#stitch-tool .cs-stage{width:100%;height:clamp(300px,65vw,480px);min-height:300px;flex:none;padding:8px}
+#stitch-tool #zoom-viewport{height:100%;min-height:0}
+#stitch-tool .cs-right{width:100%;height:auto;max-height:none;overflow:visible;border-left:0;border-top:1px solid var(--cs-line);padding:22px 20px}
+#stitch-tool .cs-zoom-toolbar{right:20px;bottom:20px;padding:5px;gap:4px}
+#stitch-tool .cs-zoom-toolbar button{min-width:40px;min-height:40px;padding:6px 10px}
+#stitch-tool #zoom-value{min-width:44px}
+#stitch-tool input[type=range]{height:38px}
+#stitch-tool .form-label{font-size:12px}
+#stitch-tool select,#stitch-tool #stitch-key-hex{font-size:16px}
+#stitch-tool .cs-dropzone{min-height:126px}
+#stitch-tool .cs-header{height:52px;padding:0 16px}
+}
+@media(max-width:360px){#stitch-tool .cs-right{padding:18px 14px}#stitch-tool .cs-zoom-toolbar{right:16px;bottom:16px}#stitch-tool .cs-stage{height:300px}}
+</style><script>
+(()=>{
+const root=document.getElementById('stitch-tool'),el=id=>root.querySelector('#'+id),canvas=el('stitch-canvas'),ctx=canvas.getContext('2d');
+const viewport=el('zoom-viewport');let zoom=1,panX=0,panY=0,drag=null;
+function updateZoom(){canvas.style.transform='translate('+panX+'px,'+panY+'px) scale('+zoom+')';el('zoom-value').value=Math.round(zoom*100)+'%'}
+function changeZoom(value){const next=Math.max(1,Math.min(8,value));if(next===1){panX=0;panY=0}else{panX*=next/zoom;panY*=next/zoom}zoom=next;updateZoom()}
+el('zoom-in').addEventListener('click',()=>changeZoom(zoom*1.25));el('zoom-out').addEventListener('click',()=>changeZoom(zoom/1.25));el('zoom-fit').addEventListener('click',()=>changeZoom(1));
+viewport.addEventListener('wheel',e=>{e.preventDefault();changeZoom(zoom*Math.exp(-e.deltaY*.002))},{passive:false});
+viewport.addEventListener('pointerdown',e=>{if(zoom<=1)return;drag={x:e.clientX,y:e.clientY,px:panX,py:panY};viewport.setPointerCapture(e.pointerId);viewport.classList.add('dragging')});
+viewport.addEventListener('pointermove',e=>{if(!drag)return;panX=drag.px+e.clientX-drag.x;panY=drag.py+e.clientY-drag.y;updateZoom()});
+function endDrag(){drag=null;viewport.classList.remove('dragging')}viewport.addEventListener('pointerup',endDrag);viewport.addEventListener('pointercancel',endDrag);viewport.addEventListener('dblclick',()=>changeZoom(zoom===1?2:1));
+const source=document.createElement('canvas');source.width=700;source.height=480;const sc=source.getContext('2d',{willReadFrequently:true});
+sc.fillStyle='#ffffff';sc.fillRect(0,0,700,480);sc.fillStyle='#456246';sc.beginPath();sc.ellipse(350,280,190,100,0,0,Math.PI*2);sc.fill();sc.fillStyle='#f0dfb5';sc.beginPath();sc.ellipse(360,265,125,75,0,0,Math.PI*2);sc.fill();sc.beginPath();sc.ellipse(278,200,40,83,-0.3,0,Math.PI*2);sc.fill();sc.beginPath();sc.ellipse(250,140,53,40,0,0,Math.PI*2);sc.fill();sc.fillStyle='#d89336';sc.beginPath();sc.moveTo(205,130);sc.lineTo(160,148);sc.lineTo(205,156);sc.fill();sc.fillStyle='#3b2c27';sc.beginPath();sc.arc(237,130,7,0,Math.PI*2);sc.fill();sc.fillStyle='#b63d49';sc.fillRect(252,185,65,18);sc.fillRect(290,195,20,65);
+let pending=false,uploaded=false;
+const rgb=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
+function draw(renderScale=2){pending=false;const size=+el('stitch-size').value,thick=+el('stitch-width').value/100,fluff=+el('stitch-fluff').value/100,remove=el('stitch-remove').checked,key=rgb(el('stitch-key').value),tol=+el('stitch-tolerance').value/100,organic=+el('stitch-organic').value/100,tone=+el('stitch-tone').value/100,relief=+el('stitch-relief').value/100,matte=+el('stitch-matte').value/100;
+canvas.width=Math.round(source.width*renderScale);canvas.height=Math.round(source.height*renderScale);ctx.scale(renderScale,renderScale);ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";const w=source.width,h=source.height,pixels=sc.getImageData(0,0,w,h).data;
+if(!remove){ctx.fillStyle=el('stitch-cloth').value;ctx.fillRect(0,0,w,h);ctx.globalAlpha=.08;ctx.strokeStyle='#806b50';ctx.lineWidth=.5;ctx.beginPath();for(let x=0;x<w;x+=3){ctx.moveTo(x,0);ctx.lineTo(x,h)}for(let y=0;y<h;y+=3){ctx.moveTo(0,y);ctx.lineTo(w,y)}ctx.stroke();ctx.globalAlpha=1}
+for(let y=0;y<h;y+=size)for(let x=0;x<w;x+=size){let i=(Math.min(h-1,Math.floor(y+size/2))*w+Math.min(w-1,Math.floor(x+size/2)))*4;const c=[pixels[i],pixels[i+1],pixels[i+2]],alpha=pixels[i+3]/255;let distance=Math.hypot(...c.map((v,j)=>v-key[j]))/441.673;let keep=remove?Math.max(0,Math.min(1,(distance-tol)/.05)):1;if(alpha*keep<.01)continue;ctx.globalAlpha=alpha*keep;const seed=((x*127+y*311)%997)/997;const color=(k)=>'rgb('+c.map(v=>Math.max(0,Math.min(255,Math.round(v*k*(1+(seed-.5)*tone*.35))))).join(',')+')';
+for(let diagonal=0;diagonal<2;diagonal++){let ax=x+size*.12,ay=y+size*(diagonal?.88:.12),bx=x+size*.88,by=y+size*(diagonal?.12:.88);const jitter=(seed-.5)*size*organic*.22;ax+=jitter;ay+=jitter*.6;bx-=jitter*.7;by+=jitter*.8;let dx=bx-ax,dy=by-ay,len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len,ww=size*thick*(1+(seed-.5)*organic*.45);
+ctx.lineCap='round';function line(offset,width,paint){ctx.beginPath();ctx.moveTo(ax+nx*offset,ay+ny*offset);ctx.bezierCurveTo(ax+dx*.33+nx*(offset+.25),ay+dy*.33+ny*(offset+.25),ax+dx*.66+nx*offset,ay+dy*.66+ny*offset,bx+nx*offset,by+ny*offset);ctx.lineWidth=width;ctx.strokeStyle=paint;ctx.stroke()}
+ctx.globalAlpha=alpha*keep*relief*.35;ctx.shadowColor="rgba(30,20,10,0.3)";ctx.shadowBlur=1+relief*2;line(.7,ww+1.3,color(.60));ctx.shadowBlur=0;ctx.globalAlpha=alpha*keep*.12*fluff;line(0,ww+2.4,color(1));ctx.globalAlpha=alpha*keep;
+let grad=ctx.createLinearGradient((ax+bx)/2-nx*ww/2,(ay+by)/2-ny*ww/2,(ax+bx)/2+nx*ww/2,(ay+by)/2+ny*ww/2);grad.addColorStop(0,color(1-relief*.55));grad.addColorStop(.36,color(1+(1-matte)*.25));grad.addColorStop(.7,color(.99));grad.addColorStop(1,color(1-relief*.52));line(0,ww,grad);
+ctx.globalAlpha=alpha*keep*.27;for(let f=-2;f<=2;f++)line(f*ww/6,.35,color(f%2?1.22:.65));
+ctx.globalAlpha=alpha*keep*fluff*.22;for(let f=0;f<5;f++){let t=(f+.3+seed)/6,px=ax+dx*t,py=ay+dy*t,side=f%2?1:-1;ctx.beginPath();ctx.moveTo(px,py);ctx.quadraticCurveTo(px+nx*ww*side,py+ny*ww*side,px+nx*(ww*.8+1)*side+1,py+ny*(ww*.8+1)*side);ctx.strokeStyle=color(1.08);ctx.lineWidth=.4;ctx.stroke()}
+} }ctx.globalAlpha=1;
+}
+function schedule(){if(!pending){pending=true;requestAnimationFrame(()=>draw())}}
+function saveState(){const values={};root.querySelectorAll('input:not([type=file])').forEach(n=>values[n.id]=n.type==='checkbox'?n.checked:n.value);window.openai?.setWidgetState?.({modelContent:{tool:'Cross Stitch',settings:values},privateContent:null}).catch(()=>{})}
+function restore(state){const values=state?.modelContent?.settings;if(values)Object.entries(values).forEach(([id,v])=>{const n=el(id);if(n){if(n.type==='checkbox')n.checked=!!v;else n.value=v}});labels();schedule()}
+function labels(){updateExportInfo();el('stitch-key-hex').value=el('stitch-key').value.toUpperCase();root.querySelectorAll('input[type=range]').forEach(n=>n.style.setProperty('--range-fill',((Number(n.value)-Number(n.min))/(Number(n.max)-Number(n.min))*100)+'%'));['size','width','fluff','tolerance','organic','tone','relief','matte'].forEach(k=>el(k+'-value').value=el('stitch-'+k).value)}
+root.querySelectorAll('input:not([type=file]):not(#stitch-key-hex)').forEach(n=>n.addEventListener('input',()=>{labels();schedule();saveState()}));
+el('stitch-key-hex').addEventListener('input',e=>{const value=e.target.value.trim();if(/^#?[0-9a-f]{6}$/i.test(value)){el('stitch-key').value=value.startsWith('#')?value:'#'+value;schedule();saveState()}});
+el('stitch-key-hex').addEventListener('blur',()=>{el('stitch-key-hex').value=el('stitch-key').value.toUpperCase()});
+function loadImageFile(file){if(!file)return;const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{const scale=Math.min(1,1600/Math.max(img.width,img.height));source.width=Math.max(1,Math.round(img.width*scale));source.height=Math.max(1,Math.round(img.height*scale));sc.clearRect(0,0,source.width,source.height);sc.drawImage(img,0,0,source.width,source.height);URL.revokeObjectURL(url);uploaded=true;updateExportInfo();el('stitch-upload-name').textContent=file.name;changeZoom(1);el('stitch-status').textContent=file.name+' · '+source.width+' × '+source.height;schedule()};img.onerror=()=>{URL.revokeObjectURL(url);el('stitch-status').textContent='Could not open image. Try a PNG or JPG file.'};img.src=url}
+el('stitch-upload').addEventListener('change',e=>loadImageFile(e.target.files[0]));
+const drop=el('stitch-drop');['dragenter','dragover'].forEach(type=>drop.addEventListener(type,e=>{e.preventDefault();drop.classList.add('is-over')}));['dragleave','drop'].forEach(type=>drop.addEventListener(type,e=>{e.preventDefault();drop.classList.remove('is-over')}));drop.addEventListener('drop',e=>{const file=e.dataTransfer.files[0];if(file&&file.type.startsWith('image/'))loadImageFile(file)});
+function exportScale(){return Math.min(Number(el('export-scale').value),8192/Math.max(source.width,source.height),Math.sqrt(32000000/(source.width*source.height)))}
+function updateExportInfo(){const format=el('export-format').value,scale=exportScale();el('export-quality-value').value=el('export-quality').value+'%';el('export-quality-label').hidden=format==='png';el('export-info').textContent=Math.round(source.width*scale)+' × '+Math.round(source.height*scale)+' px'+(format==='jpeg'?' · White background':'');el('save-stitch').innerHTML='<span aria-hidden="true">⤓</span> Download '+format.toUpperCase()}
+['export-format','export-scale'].forEach(id=>el(id).addEventListener('change',updateExportInfo));
+el('save-stitch').addEventListener('click',()=>{const button=el('save-stitch');button.disabled=true;button.textContent='Rendering…';requestAnimationFrame(()=>{try{draw(exportScale());const target=document.createElement('canvas');target.width=canvas.width;target.height=canvas.height;const ec=target.getContext('2d'),format=el('export-format').value;if(format==='jpeg'){ec.fillStyle='#ffffff';ec.fillRect(0,0,target.width,target.height)}ec.drawImage(canvas,0,0);draw();target.toBlob(blob=>{button.disabled=false;updateExportInfo();if(!blob){el('export-info').textContent='Export failed. Try a lower resolution.';return}const ext=blob.type==='image/png'?'png':blob.type==='image/jpeg'?'jpg':'webp',url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='cross-stitch.'+ext;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000)},'image/'+format,Number(el('export-quality').value)/100)}catch(error){button.disabled=false;draw();updateExportInfo();el('export-info').textContent='Export failed. Try a lower resolution.'}})});
+window.addEventListener('openai:set_globals',e=>{if(e.detail?.globals?.widgetState)restore(e.detail.globals.widgetState)});restore(window.openai?.widgetState);
+})();
+</script></body></html>
